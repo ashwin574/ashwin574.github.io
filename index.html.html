@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Ashwin T Krishna — Portfolio</title>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#faf8f4;--warm1:#f2ede4;--warm2:#e8dfd0;--warm3:#c9b99a;
+  --brown:#5c4a32;--dark:#2c1f0e;--text:#3d2f1e;--muted:#7a6552;
+  --accent:#8b6f47;--white:#ffffff;
+  --radius:10px;--ease:cubic-bezier(0.25,0.46,0.45,0.94);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--cream);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.7;overflow-x:hidden}
+
+/* BLUR ORBS */
+.orb{position:fixed;border-radius:50%;filter:blur(80px);opacity:0.18;pointer-events:none;z-index:0;will-change:transform}
+.orb1{width:500px;height:500px;background:#c9b99a;top:-100px;left:-150px;animation:drift1 18s ease-in-out infinite}
+.orb2{width:400px;height:400px;background:#8b6f47;bottom:-80px;right:-100px;animation:drift2 22s ease-in-out infinite}
+.orb3{width:300px;height:300px;background:#e8dfd0;top:40%;left:60%;animation:drift3 15s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(60px,40px)}}
+@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-50px,-30px)}}
+@keyframes drift3{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,50px)}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 2rem;transition:all 0.4s var(--ease)}
+nav.scrolled{background:rgba(250,248,244,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,185,154,0.3)}
+.nav-inner{max-width:920px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{font-size:1rem;font-weight:700;color:var(--brown);letter-spacing:0.06em;text-decoration:none;transition:opacity 0.3s}
+.nav-logo:hover{opacity:0.7}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.85rem;letter-spacing:0.03em;position:relative;transition:color 0.3s var(--ease)}
+.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:1.5px;background:var(--brown);transform:scaleX(0);transform-origin:center;transition:transform 0.3s var(--ease)}
+.nav-links a:hover{color:var(--brown)}
+.nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1)}
+.nav-links a.active{color:var(--brown)}
+
+/* LAYOUT */
+section{padding:6rem 2rem;max-width:920px;margin:0 auto;position:relative;z-index:1}
+.section-label{font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:0.4rem}
+h1{font-size:clamp(2.4rem,5.5vw,3.8rem);font-weight:700;color:var(--dark);line-height:1.1;margin-bottom:1rem;letter-spacing:-0.02em}
+h2{font-size:1.7rem;font-weight:600;color:var(--dark);margin-bottom:1.5rem;letter-spacing:-0.01em}
+h3{font-size:1rem;font-weight:600;color:var(--brown)}
+p{color:var(--muted);font-size:1rem;max-width:580px;line-height:1.75}
+.divider{width:36px;height:2.5px;background:var(--accent);border-radius:2px;margin:0.4rem 0 1.8rem;transition:width 0.6s var(--ease)}
+section.visible .divider{width:60px}
+
+/* HERO */
+#hero{padding-top:9rem;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+.hero-tag{display:inline-flex;align-items:center;gap:0.5rem;background:var(--warm2);color:var(--brown);font-size:0.75rem;padding:0.4rem 1rem;border-radius:20px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;margin-bottom:1.8rem;border:1px solid var(--warm3)}
+.hero-tag .dot{width:6px;height:6px;border-radius:50%;background:#6a8a5a;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+.hero-name{font-size:1rem;font-weight:400;color:var(--muted);margin-bottom:0.4rem;letter-spacing:0.12em;text-transform:uppercase}
+.hero-title span{color:var(--accent);position:relative}
+.hero-sub{font-size:1.05rem;margin:1.2rem 0 2.2rem;max-width:520px;line-height:1.8}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.8rem;border-radius:var(--radius);font-size:0.88rem;font-weight:600;text-decoration:none;cursor:pointer;border:none;transition:all 0.3s var(--ease);font-family:inherit;position:relative;overflow:hidden}
+.btn::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.1);opacity:0;transition:opacity 0.3s}
+.btn:hover::before{opacity:1}
+.btn-primary{background:var(--brown);color:var(--cream);transform:translateY(0)}
+.btn-primary:hover{background:var(--dark);transform:translateY(-2px)}
+.btn-outline{background:transparent;color:var(--brown);border:1.5px solid var(--warm3)}
+.btn-outline:hover{background:var(--warm2);transform:translateY(-2px)}
+.hero-scroll{display:flex;align-items:center;gap:0.6rem;margin-top:4rem;color:var(--muted);font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;opacity:0.7}
+.scroll-line{width:40px;height:1px;background:var(--warm3);animation:scrollpulse 2s ease-in-out infinite}
+@keyframes scrollpulse{0%,100%{width:40px;opacity:0.5}50%{width:60px;opacity:1}}
+
+/* ABOUT */
+#about{border-top:1px solid var(--warm2)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;margin-top:2rem}
+.about-text p{margin-bottom:1rem}
+.about-card{background:var(--white);border:1px solid var(--warm2);border-radius:16px;padding:1.6rem;transition:border-color 0.3s,transform 0.3s var(--ease)}
+.about-card:hover{border-color:var(--warm3);transform:translateY(-3px)}
+.about-card h3{margin-bottom:1.2rem;color:var(--brown);font-size:0.95rem;letter-spacing:0.04em;text-transform:uppercase}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:0.55rem 0;border-bottom:1px solid var(--warm2);font-size:0.88rem}
+.info-row:last-child{border-bottom:none}
+.info-label{color:var(--muted)}
+.info-val{color:var(--text);font-weight:500;text-align:right}
+
+/* SKILLS */
+#skills{border-top:1px solid var(--warm2)}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem;margin-top:2rem}
+.skill-card{background:var(--white);border:1px solid var(--warm2);border-radius:14px;padding:1.3rem 1.5rem;transition:all 0.35s var(--ease);position:relative;overflow:hidden}
+.skill-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,185,154,0.08),transparent);opacity:0;transition:opacity 0.3s}
+.skill-card:hover{border-color:var(--warm3);transform:translateY(-4px)}
+.skill-card:hover::before{opacity:1}
+.skill-icon{font-size:1.6rem;margin-bottom:0.6rem;display:block}
+.skill-card h3{font-size:0.9rem;margin-bottom:0.7rem;color:var(--brown)}
+.skill-tags{display:flex;flex-wrap:wrap;gap:0.4rem}
+.tag{font-size:0.7rem;background:var(--warm1);color:var(--muted);padding:0.2rem 0.65rem;border-radius:20px;border:1px solid var(--warm2);letter-spacing:0.02em;transition:all 0.2s}
+.skill-card:hover .tag{background:var(--warm2);border-color:var(--warm3)}
+
+/* PROJECTS */
+#projects{border-top:1px solid var(--warm2)}
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:2rem}
+.project-card{background:var(--white);border:1px solid var(--warm2);border-radius:16px;overflow:hidden;transition:all 0.35s var(--ease);display:flex;flex-direction:column;position:relative}
+.project-card:hover{border-color:var(--accent);transform:translateY(-5px)}
+.project-card.upcoming{border-style:dashed;background:var(--warm1);opacity:0.9}
+.project-card.upcoming:hover{opacity:1;transform:translateY(-4px)}
+.project-top{padding:1.3rem 1.5rem;border-bottom:1px solid var(--warm2)}
+.project-card.upcoming .project-top{background:transparent}
+.project-card:not(.upcoming) .project-top{background:var(--warm1)}
+.badge-row{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.7rem}
+.project-badge{font-size:0.65rem;background:var(--warm2);color:var(--accent);padding:0.2rem 0.65rem;border-radius:20px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;border:1px solid var(--warm3)}
+.upcoming-badge{font-size:0.65rem;background:#e8f0e4;color:#4a7a3a;padding:0.2rem 0.65rem;border-radius:20px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;border:1px solid #b8d4b0}
+.project-top h3{font-size:0.98rem;color:var(--dark);line-height:1.4}
+.project-body{padding:1.2rem 1.5rem;flex:1}
+.project-body p{font-size:0.86rem;color:var(--muted);margin-bottom:0.9rem;line-height:1.7;max-width:100%}
+.project-stack{display:flex;flex-wrap:wrap;gap:0.35rem}
+.project-links{padding:0.9rem 1.5rem;border-top:1px solid var(--warm2);display:flex;gap:1rem}
+.link-btn{font-size:0.8rem;color:var(--brown);text-decoration:none;font-weight:600;display:flex;align-items:center;gap:0.3rem;transition:all 0.25s;padding:0.3rem 0}
+.link-btn:hover{color:var(--dark);gap:0.5rem}
+.upcoming-note{padding:0.9rem 1.5rem;border-top:1px solid var(--warm2);font-size:0.78rem;color:var(--muted);font-style:italic;display:flex;align-items:center;gap:0.5rem}
+.upcoming-dot{width:6px;height:6px;border-radius:50%;background:#6a8a5a;animation:pulse 2s ease-in-out infinite;flex-shrink:0}
+
+/* GITHUB */
+#github{border-top:1px solid var(--warm2)}
+.github-card{background:var(--white);border:1px solid var(--warm2);border-radius:16px;padding:2.2rem;display:flex;align-items:center;gap:2rem;margin-top:2rem;transition:all 0.35s var(--ease);text-decoration:none}
+.github-card:hover{border-color:var(--warm3);transform:translateY(-3px)}
+.gh-icon{width:64px;height:64px;background:var(--dark);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.3s var(--ease)}
+.github-card:hover .gh-icon{transform:rotate(8deg) scale(1.05)}
+.gh-icon svg{width:34px;height:34px;fill:var(--cream)}
+.gh-text h3{font-size:1.05rem;margin-bottom:0.3rem;color:var(--dark)}
+.gh-text p{font-size:0.87rem;margin:0;max-width:100%;color:var(--muted)}
+.gh-link{margin-top:0.8rem;display:inline-flex;align-items:center;gap:0.4rem;font-size:0.84rem;font-weight:600;color:var(--brown);transition:gap 0.25s}
+.github-card:hover .gh-link{gap:0.7rem}
+
+/* CONTACT */
+#contact{border-top:1px solid var(--warm2)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;margin-top:2rem}
+.contact-info p{font-size:0.95rem;margin-bottom:1.8rem;line-height:1.8}
+.contact-item{display:flex;align-items:center;gap:0.9rem;margin-bottom:1.1rem;font-size:0.88rem}
+.contact-item a{color:var(--brown);text-decoration:none;font-weight:500;transition:all 0.25s}
+.contact-item a:hover{color:var(--dark);letter-spacing:0.01em}
+.c-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.contact-form{background:var(--white);border:1px solid var(--warm2);border-radius:16px;padding:1.8rem;display:flex;flex-direction:column;gap:1rem;position:relative;overflow:hidden;transition:border-color 0.3s}
+.contact-form:focus-within{border-color:var(--warm3)}
+.form-field{display:flex;flex-direction:column;gap:0.35rem}
+.form-field label{font-size:0.72rem;font-weight:600;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase}
+.form-field input,.form-field textarea{background:var(--warm1);border:1px solid var(--warm2);border-radius:8px;padding:0.7rem 1rem;font-size:0.9rem;color:var(--text);font-family:inherit;resize:none;outline:none;transition:all 0.3s var(--ease)}
+.form-field input:focus,.form-field textarea:focus{border-color:var(--accent);background:var(--white);transform:translateY(-1px)}
+.send-btn{background:var(--brown);color:var(--cream);border:none;border-radius:var(--radius);padding:0.85rem;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.3s var(--ease);font-family:inherit;display:flex;align-items:center;justify-content:center;gap:0.5rem}
+.send-btn:hover:not(:disabled){background:var(--dark);transform:translateY(-2px)}
+.send-btn:active:not(:disabled){transform:translateY(0)}
+.send-btn:disabled{opacity:0.6;cursor:not-allowed}
+
+/* SUCCESS OVERLAY */
+.success-overlay{position:absolute;inset:0;background:rgba(250,248,244,0.97);backdrop-filter:blur(8px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;opacity:0;pointer-events:none;transition:opacity 0.5s var(--ease);z-index:10;border-radius:16px}
+.success-overlay.show{opacity:1;pointer-events:all}
+.checkmark-wrap{width:76px;height:76px;border-radius:50%;background:var(--brown);display:flex;align-items:center;justify-content:center;transform:scale(0) rotate(-180deg);transition:transform 0.6s cubic-bezier(0.34,1.56,0.64,1)}
+.success-overlay.show .checkmark-wrap{transform:scale(1) rotate(0deg)}
+.checkmark-wrap svg{width:38px;height:38px;stroke:var(--cream);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.checkmark-path{stroke-dasharray:50;stroke-dashoffset:50;transition:stroke-dashoffset 0.5s ease 0.5s}
+.success-overlay.show .checkmark-path{stroke-dashoffset:0}
+.success-title{font-size:1.15rem;font-weight:700;color:var(--dark);opacity:0;transform:translateY(10px);transition:all 0.4s ease 0.7s}
+.success-overlay.show .success-title{opacity:1;transform:translateY(0)}
+.success-sub{font-size:0.84rem;color:var(--muted);text-align:center;max-width:210px;opacity:0;transform:translateY(8px);transition:all 0.4s ease 0.85s;line-height:1.6}
+.success-overlay.show .success-sub{opacity:1;transform:translateY(0)}
+.success-back{margin-top:0.3rem;background:transparent;border:1.5px solid var(--warm3);color:var(--brown);border-radius:var(--radius);padding:0.5rem 1.3rem;font-size:0.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.25s;opacity:0;transition:opacity 0.4s ease 1s,background 0.25s,transform 0.25s}
+.success-overlay.show .success-back{opacity:1}
+.success-back:hover{background:var(--warm2);transform:translateY(-1px)}
+
+/* SPINNER */
+.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,0.35);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;display:none;flex-shrink:0}
+.send-btn.loading .spinner{display:block}
+.send-btn.loading .btn-text{display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* FOOTER */
+footer{background:var(--dark);color:rgba(232,223,208,0.7);text-align:center;padding:1.8rem 2rem;font-size:0.8rem;position:relative;z-index:1}
+footer span{color:var(--warm3)}
+
+/* ANIMATIONS */
+.fade-up{opacity:0;transform:translateY(32px);transition:opacity 0.7s var(--ease),transform 0.7s var(--ease)}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+.fade-up:nth-child(2){transition-delay:0.1s}
+.fade-up:nth-child(3){transition-delay:0.2s}
+.stagger>*{opacity:0;transform:translateY(24px);transition:opacity 0.6s var(--ease),transform 0.6s var(--ease)}
+.stagger.visible>*:nth-child(1){opacity:1;transform:none;transition-delay:0s}
+.stagger.visible>*:nth-child(2){opacity:1;transform:none;transition-delay:0.1s}
+.stagger.visible>*:nth-child(3){opacity:1;transform:none;transition-delay:0.2s}
+.stagger.visible>*:nth-child(4){opacity:1;transform:none;transition-delay:0.3s}
+.stagger.visible>*:nth-child(5){opacity:1;transform:none;transition-delay:0.4s}
+.stagger.visible>*:nth-child(6){opacity:1;transform:none;transition-delay:0.5s}
+
+@media(max-width:640px){
+  .about-grid,.contact-grid{grid-template-columns:1fr}
+  nav{padding:0 1.2rem}
+  section{padding:4rem 1.2rem}
+  .hero-stats{gap:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- BLUR ORBS -->
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#hero">thatguyashwin</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#github">GitHub</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="fade-up">
+    <div class="hero-tag"><span class="dot"></span>Available for opportunities</div>
+    <div class="hero-name">Ashwin T Krishna</div>
+    <h1 class="hero-title">Embedded Systems<br>&amp; <span>IoT Engineer</span></h1>
+    <p class="hero-sub">I design and build intelligent hardware — from low-level firmware to full IoT ecosystems and autonomous robots — bridging the gap between silicon and the real world.</p>
+    <div class="hero-btns">
+      <button class="btn btn-primary" onclick="goTo('projects')">View Projects</button>
+      <button class="btn btn-outline" onclick="goTo('contact')">Get in Touch</button>
+    </div>
+    <div class="hero-scroll"><div class="scroll-line"></div>Scroll to explore</div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="fade-up">
+    <div class="section-label">Who I am</div>
+    <h2>About Me</h2>
+    <div class="divider"></div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I'm Ashwin T Krishna — an embedded systems and IoT engineer who loves turning hardware ideas into working reality. From designing circuits and PCBs to writing firmware and integrating cloud connectivity, I handle the full stack of embedded development.</p>
+        <p>My work spans industrial automation, smart home systems, and healthcare applications. I'm driven by precision, clean design, and systems that just work.</p>
+        <button class="btn btn-outline" onclick="goTo('contact')" style="margin-top:1.2rem;font-size:0.85rem">Contact Me</button>
+      </div>
+      <div class="about-card">
+        <h3>Quick Info</h3>
+        <div class="info-row"><span class="info-label">Name</span><span class="info-val">Ashwin T Krishna</span></div>
+        <div class="info-row"><span class="info-label">Alias</span><span class="info-val">thatguyashwin</span></div>
+        <div class="info-row"><span class="info-label">Location</span><span class="info-val">Kerala, India</span></div>
+        <div class="info-row"><span class="info-label">Focus</span><span class="info-val">Embedded / IoT / Robotics</span></div>
+        <div class="info-row"><span class="info-label">Email</span><span class="info-val">ashwintt65@gmail.com</span></div>
+        <div class="info-row"><span class="info-label">Status</span><span class="info-val" style="color:#5a8a4a">&#x25cf; Open to Work</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="fade-up">
+    <div class="section-label">What I know</div>
+    <h2>Skills</h2>
+    <div class="divider"></div>
+    <div class="skills-grid stagger">
+      <div class="skill-card"><span class="skill-icon">&#x1F9B5;</span><h3>Embedded Systems</h3><div class="skill-tags"><span class="tag">Design</span><span class="tag">Development</span><span class="tag">Firmware</span><span class="tag">HW-SW Integration</span></div></div>
+      <div class="skill-card"><span class="skill-icon">&#x1F4F6;</span><h3>IoT Connectivity</h3><div class="skill-tags"><span class="tag">Wi-Fi</span><span class="tag">Bluetooth</span><span class="tag">Zigbee</span><span class="tag">Cloud</span><span class="tag">IoT Security</span><span class="tag">Protocols</span></div></div>
+      <div class="skill-card"><span class="skill-icon">&#x1F527;</span><h3>Hardware Design</h3><div class="skill-tags"><span class="tag">Circuit Design</span><span class="tag">PCB Prototyping</span><span class="tag">Sensor Interfacing</span><span class="tag">Actuators</span></div></div>
+      <div class="skill-card"><span class="skill-icon">&#x1F4CA;</span><h3>Data &amp; Signal</h3><div class="skill-tags"><span class="tag">Data Acquisition</span><span class="tag">Signal Processing</span><span class="tag">Debugging</span><span class="tag">Troubleshooting</span></div></div>
+      <div class="skill-card"><span class="skill-icon">&#x1F3ED;</span><h3>Automation</h3><div class="skill-tags"><span class="tag">Industrial</span><span class="tag">Smart Home</span><span class="tag">Healthcare</span></div></div>
+      <div class="skill-card"><span class="skill-icon">&#x1F916;</span><h3>Robotics</h3><div class="skill-tags"><span class="tag">Motor Control</span><span class="tag">Sensor Fusion</span><span class="tag">PID</span><span class="tag">Autonomous Systems</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="fade-up">
+    <div class="section-label">What I've built</div>
+    <h2>Projects</h2>
+    <div class="divider"></div>
+    <div class="projects-grid stagger">
+      <div class="project-card">
+        <div class="project-top">
+          <div class="badge-row"><span class="project-badge">IoT · Firebase</span></div>
+          <h3>Firebase Real-Time Control &amp; Monitoring Platform</h3>
+        </div>
+        <div class="project-body">
+          <p>A full IoT platform for real-time monitoring and remote control of devices — robo cars, home automation systems, and custom prototypes — from any web browser or mobile app, anywhere in the world. Powered by Firebase and ESP32.</p>
+          <div class="project-stack"><span class="tag">ESP32</span><span class="tag">Firebase</span><span class="tag">Web App</span><span class="tag">Mobile App</span><span class="tag">Real-Time DB</span><span class="tag">Home Automation</span></div>
+        </div>
+        <div class="project-links"><a href="https://github.com/ashwin574" target="_blank" class="link-btn">&#x2197; GitHub</a></div>
+      </div>
+      <div class="project-card">
+        <div class="project-top">
+          <div class="badge-row"><span class="project-badge">Robotics · Vision</span></div>
+          <h3>Autonomous Spy Robot — Environment-Aware Smart Car</h3>
+        </div>
+        <div class="project-body">
+          <p>A remotely operated smart car built to explore areas unsafe for humans. Equipped with ultrasonic sensors for obstacle detection and a camera for live photo capture. Fully controllable via web dashboard or mobile app — a true field reconnaissance robot.</p>
+          <div class="project-stack"><span class="tag">ESP32</span><span class="tag">Ultrasonic</span><span class="tag">Camera Module</span><span class="tag">Web Control</span><span class="tag">Mobile App</span><span class="tag">C++</span></div>
+        </div>
+        <div class="project-links"><a href="https://github.com/ashwin574" target="_blank" class="link-btn">&#x2197; GitHub</a></div>
+      </div>
+      <div class="project-card upcoming">
+        <div class="project-top">
+          <div class="badge-row"><span class="project-badge">Drone · Aerial</span><span class="upcoming-badge">&#x1F6A7; Upcoming</span></div>
+          <h3>Project D1 — Gen2 Autonomous Drone</h3>
+        </div>
+        <div class="project-body">
+          <p>Next-generation autonomous drone project currently in development. Featuring advanced flight control, real-time telemetry, and intelligent navigation — pushing the boundaries of aerial embedded systems.</p>
+          <div class="project-stack"><span class="tag">Flight Controller</span><span class="tag">Telemetry</span><span class="tag">Autonomous Nav</span><span class="tag">ESP32</span><span class="tag">Gen2</span></div>
+        </div>
+        <div class="upcoming-note"><span class="upcoming-dot"></span>In active development — stay tuned</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GITHUB -->
+<section id="github">
+  <div class="fade-up">
+    <div class="section-label">Open source</div>
+    <h2>GitHub</h2>
+    <div class="divider"></div>
+    <a href="https://github.com/ashwin574" target="_blank" class="github-card">
+      <div class="gh-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      </div>
+      <div class="gh-text">
+        <h3>github.com/ashwin574</h3>
+        <p>All my embedded projects, firmware libraries, IoT experiments, and robotics builds live here. Feel free to explore, fork, and star.</p>
+        <span class="gh-link">Visit Profile &#x2192;</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="fade-up">
+    <div class="section-label">Let's talk</div>
+    <h2>Contact</h2>
+    <div class="divider"></div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <p>Have a project in mind or want to discuss an opportunity? I'd love to hear from you.</p>
+        <div class="contact-item"><span class="c-dot"></span><a href="mailto:ashwintt65@gmail.com">ashwintt65@gmail.com</a></div>
+        <div class="contact-item"><span class="c-dot"></span><a href="https://github.com/ashwin574" target="_blank">github.com/ashwin574</a></div>
+        <div class="contact-item"><span class="c-dot"></span><a href="https://www.linkedin.com/in/ashwin-tkrishna" target="_blank">linkedin.com/in/ashwin-tkrishna</a></div>
+        <div class="contact-item"><span class="c-dot"></span><span style="color:var(--text);font-weight:500">Kerala, India</span></div>
+      </div>
+      <div class="contact-form" id="contactForm">
+        <div class="success-overlay" id="successOverlay">
+          <div class="checkmark-wrap">
+            <svg viewBox="0 0 24 24"><polyline class="checkmark-path" points="4,13 9,18 20,7"/></svg>
+          </div>
+          <div class="success-title">Message Sent!</div>
+          <div class="success-sub">Thanks for reaching out — Ashwin will get back to you shortly.</div>
+          <button class="success-back" onclick="resetForm()">Send another ↩</button>
+        </div>
+        <div class="form-field"><label>Name</label><input type="text" id="cf-name" placeholder="Your name" maxlength="80"/></div>
+        <div class="form-field"><label>Email</label><input type="email" id="cf-email" placeholder="your@email.com" maxlength="120"/></div>
+        <div class="form-field"><label>Message</label><textarea id="cf-msg" rows="4" placeholder="Tell me about your project..." maxlength="1000"></textarea></div>
+        <button class="send-btn" id="sendBtn" onclick="handleSend()">
+          <span class="btn-text">Send Message</span>
+          <div class="spinner"></div>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Crafted with care &mdash; <span>Ashwin T Krishna</span> &copy; 2026</p>
+</footer>
+
+<script>
+emailjs.init('aqk5bP2L_9gf6WLUC');
+
+function goTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* Nav scroll effect */
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 30);
+}, {passive:true});
+
+/* Nav active links */
+const sections = document.querySelectorAll('section[id]');
+const navAs = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 90) cur = s.id; });
+  navAs.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + cur);
+  });
+}, {passive:true});
+
+/* Nav anchor clicks */
+navAs.forEach(a => {
+  a.addEventListener('click', e => {
+    const h = a.getAttribute('href');
+    if (h && h.startsWith('#')) { e.preventDefault(); goTo(h.slice(1)); }
+  });
+});
+
+/* Intersection observer — fade-up & stagger & divider */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      const parent = e.target.closest('section');
+      if (parent) parent.classList.add('visible');
+    }
+  });
+}, {threshold:0.1});
+document.querySelectorAll('.fade-up, .stagger').forEach(el => obs.observe(el));
+
+/* Send */
+async function handleSend() {
+  const name = document.getElementById('cf-name').value.trim();
+  const email = document.getElementById('cf-email').value.trim();
+  const msg = document.getElementById('cf-msg').value.trim();
+  if (!name || !email || !msg) { alert('Please fill in all fields.'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Please enter a valid email address.'); return; }
+  const btn = document.getElementById('sendBtn');
+  btn.disabled = true; btn.classList.add('loading');
+  try {
+    await emailjs.send('service_hmby0kd', 'template_adc5o47', {
+      from_name: name, from_email: email, message: msg, to_name: 'Ashwin'
+    });
+  } catch(e) { console.warn('EmailJS:', e); }
+  btn.disabled = false; btn.classList.remove('loading');
+  const waMsg = encodeURIComponent('New portfolio message from ' + name + ' (' + email + '):\n' + msg);
+  window.open('https://wa.me/918590923981?text=' + waMsg, '_blank');
+  document.getElementById('successOverlay').classList.add('show');
+}
+
+function resetForm() {
+  document.getElementById('successOverlay').classList.remove('show');
+  document.getElementById('cf-name').value = '';
+  document.getElementById('cf-email').value = '';
+  document.getElementById('cf-msg').value = '';
+}
+</script>
+</body>
+</html>
